@@ -23,6 +23,7 @@ const Bookings = () => {
                     setBookings(data)
                 }
                 else {
+                    // logout and navigate
                     navigate('/');
                 }
             });
