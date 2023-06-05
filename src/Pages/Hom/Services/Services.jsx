@@ -1,16 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ServiceCard from "./ServiceCard";
 
 const Services = () => {
 
     const [services, setServices] = useState([]);
     const [asc, setAsc] = useState(true);
+    const searchRef = useRef(null);
+    const [search, setSearch] = useState('')
 
     useEffect( () => {
-        fetch(`http://localhost:5000/services?sort=${asc ? 'asc' : 'desc'}`)
+        fetch(`http://localhost:5000/services?search=${search}&sort=${asc ? 'asc' : 'desc'}`)
         .then(res => res.json())
         .then(data => setServices(data))
-    }, [asc])
+    }, [asc, search])
+
+    const handleSearch = () => {
+        console.log(searchRef.current.value);
+        setSearch(searchRef.current.value);
+    }
 
 
     return (
@@ -24,6 +31,11 @@ const Services = () => {
                     injected humour, or randomised <br /> words which do not look even
                     slightly believable.
                 </p>
+
+                <div className="text-left">
+                    <input type="text" ref={searchRef} name="search" id="" className="border px-3 py-1" />
+                    <input onClick={handleSearch} type="submit" value="Search" className="btn btn-primary" />
+                </div>
 
                 <button className="btn btn-primary" onClick={() => setAsc(!asc)}>
                     { asc ? "Price High to Low" : "Price Low to High" }
